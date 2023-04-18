@@ -181,7 +181,7 @@ describe GildedRose do
       expect(items[1].sell_in).to eq -1
       expect(items[1].quality).to eq 24
       expect(items[2].sell_in).to eq -1
-      expect(items[2].quality).to eq 3
+      expect(items[2].quality).to eq 1
       gr.update_quality()
       expect(items[0].sell_in).to eq 7
       expect(items[0].quality).to eq 42

@@ -61,4 +61,27 @@ describe GildedRose do
     it_behaves_like "an item whose sell_in reduces"
     it_behaves_like "an item whose quality reduces"
   end
+
+  describe "Sulfuras, Hand of Ragnaros" do
+    let(:sulfuras_item) { Item.new("Sulfuras, Hand of Ragnaros", 0, 80) }
+    let(:sulfuras_item1) { Item.new("Sulfuras, Hand of Ragnaros", 3, 80) }
+    let(:items) { [ sulfuras_item, sulfuras_item1 ] }
+
+    it "does not modify sell_in or quality" do
+      gr = GildedRose.new(items)
+      gr.update_quality()
+      expect(items[0].sell_in).to eq 0
+      expect(items[0].quality).to eq 80
+      expect(items[1].sell_in).to eq 3
+      expect(items[1].quality).to eq 80
+      gr.update_quality()
+      expect(items[0].sell_in).to eq 0
+      expect(items[0].quality).to eq 80
+      expect(items[1].sell_in).to eq 3
+      expect(items[1].quality).to eq 80
+    end
+
+    it_behaves_like "all items"
+  end
+
 end

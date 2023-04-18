@@ -110,4 +110,55 @@ describe GildedRose do
 
     it_behaves_like "all items"
   end
+
+  describe "Backstage passes to a TAFKAL80ETC concert" do
+    let(:bsp_item) { Item.new("Backstage passes to a TAFKAL80ETC concert", 11, 20) }
+    let(:bsp_item1) { Item.new("Backstage passes to a TAFKAL80ETC concert", 6, 44) }
+    let(:bsp_item2) { Item.new("Backstage passes to a TAFKAL80ETC concert", 1, 10) }
+    let(:items) { [ bsp_item, bsp_item1 ] }
+
+    it "increases quality by 1 when sell in is greater than 10" do
+      gr = GildedRose.new(items)
+      gr.update_quality()
+      expect(items[0].sell_in).to eq 10
+      expect(items[0].quality).to eq 21
+    end
+
+    it "increases quality by 2 when sell in is 10 days or less but more than 5 days" do
+      gr = GildedRose.new(items)
+      gr.update_quality()
+      expect(items[0].sell_in).to eq 10
+      expect(items[0].quality).to eq 21
+      gr.update_quality()
+      expect(items[0].sell_in).to eq 9
+      expect(items[0].quality).to eq 23
+    end
+
+    it "increases quality by 3 when sell in is 5 days or less but more than 0 days but does not pass a maximum of 50" do
+      gr = GildedRose.new(items)
+      gr.update_quality()
+      expect(items[1].sell_in).to eq 5
+      expect(items[1].quality).to eq 46
+      gr.update_quality()
+      expect(items[1].sell_in).to eq 4
+      expect(items[1].quality).to eq 49
+      gr.update_quality()
+      expect(items[1].sell_in).to eq 3
+      expect(items[1].quality).to eq 50
+    end
+
+    it "sets quality to zero when sell in has reached zero" do
+      gr = GildedRose.new([ bsp_item2 ])
+      gr.update_quality()
+      expect(bsp_item2.sell_in).to eq 0
+      expect(bsp_item2.quality).to eq 13
+      gr.update_quality()
+      expect(bsp_item2.sell_in).to eq -1
+      expect(bsp_item2.quality).to eq 0
+    end
+
+    it_behaves_like "all items"
+  end
+
+
 end

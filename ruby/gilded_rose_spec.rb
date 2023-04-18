@@ -160,5 +160,37 @@ describe GildedRose do
     it_behaves_like "all items"
   end
 
+  describe "Conjured Mana Cake" do
+    let(:con_item) { Item.new("Conjured Mana Cake", 10, 48) }
+    let(:con_item1) { Item.new("Conjured Mana Cake", 1, 30) }
+    let(:con_item2) { Item.new("Conjured Mana Cake", 1, 7) }
+    let(:items) { [ con_item, con_item1, con_item2 ] }
 
+    it "reduces quality by 2 when sell_in > -1, then by -4 to a minimum of 0" do
+      gr = GildedRose.new(items)
+      gr.update_quality()
+      expect(items[0].sell_in).to eq 9
+      expect(items[0].quality).to eq 46
+      expect(items[1].sell_in).to eq 0
+      expect(items[1].quality).to eq 28
+      expect(items[2].sell_in).to eq 0
+      expect(items[2].quality).to eq 5
+      gr.update_quality()
+      expect(items[0].sell_in).to eq 8
+      expect(items[0].quality).to eq 44
+      expect(items[1].sell_in).to eq -1
+      expect(items[1].quality).to eq 24
+      expect(items[2].sell_in).to eq -1
+      expect(items[2].quality).to eq 3
+      gr.update_quality()
+      expect(items[0].sell_in).to eq 7
+      expect(items[0].quality).to eq 42
+      expect(items[1].sell_in).to eq -2
+      expect(items[1].quality).to eq 20
+      expect(items[2].sell_in).to eq -2
+      expect(items[2].quality).to eq 0
+    end
+
+    it_behaves_like "all items"
+  end
 end

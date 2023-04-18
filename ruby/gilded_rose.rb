@@ -10,8 +10,11 @@ class GildedRose
       if item.name == "Conjured Mana Cake"
          decrement_sell_in(item)
          decrement_quality(item, (item.sell_in < 0) ? 4 : 2)
+      elsif item.name == "Aged Brie"
+         decrement_sell_in(item)
+         increment_quality(item, (item.sell_in < 0) ? 2 : 1)
       else
-        if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
+        if item.name != "Backstage passes to a TAFKAL80ETC concert"
           decrement_quality(item, 1)
         else
           if item.quality < 50
@@ -28,14 +31,10 @@ class GildedRose
         end
         item.sell_in = item.sell_in - 1
         if item.sell_in < 0
-          if item.name != "Aged Brie"
-            if item.name != "Backstage passes to a TAFKAL80ETC concert"
-              decrement_quality(item, 1)
-            else
-              item.quality = item.quality - item.quality
-            end
+          if item.name != "Backstage passes to a TAFKAL80ETC concert"
+            decrement_quality(item, 1)
           else
-            increment_quality(item)
+            item.quality = item.quality - item.quality
           end
         end
       end
@@ -52,10 +51,8 @@ class GildedRose
      item
   end
 
-  def increment_quality(item)
-    if item.quality < 50
-      item.quality = item.quality + 1
-    end
+  def increment_quality(item, amount=1)
+    item.quality = item.quality + amount > 50 ? 50 : item.quality + amount
     item
   end
 end

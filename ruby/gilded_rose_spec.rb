@@ -84,4 +84,30 @@ describe GildedRose do
     it_behaves_like "all items"
   end
 
+  describe "Aged Brie" do
+    let(:aged_brie_item) { Item.new("Aged Brie", 10, 48) }
+    let(:aged_brie_item1) { Item.new("Aged Brie", 1, 48) }
+    let(:items) { [ aged_brie_item, aged_brie_item1 ] }
+
+    it "increases quality by 1 until it reaches a maximum of 50 regardless of sell_in" do
+      gr = GildedRose.new(items)
+      gr.update_quality()
+      expect(items[0].sell_in).to eq 9
+      expect(items[0].quality).to eq 49
+      expect(items[1].sell_in).to eq 0
+      expect(items[1].quality).to eq 49
+      gr.update_quality()
+      expect(items[0].sell_in).to eq 8
+      expect(items[0].quality).to eq 50
+      expect(items[1].sell_in).to eq -1
+      expect(items[1].quality).to eq 50
+      gr.update_quality()
+      expect(items[0].sell_in).to eq 7
+      expect(items[0].quality).to eq 50
+      expect(items[1].sell_in).to eq -2
+      expect(items[1].quality).to eq 50
+    end
+
+    it_behaves_like "all items"
+  end
 end
